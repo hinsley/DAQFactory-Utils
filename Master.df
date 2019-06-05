@@ -1,0 +1,33 @@
+class Master
+    // Normalization for arrays using a master test curve.
+    // 
+    // Note:
+    // - Master test should always have the same update frequency as any
+    //   curves being normalized.
+    // - Any curve being normalized should contain equal or lesser quantity
+    //   of data points compared to master test curve.
+    
+    private masterCurve = NULL
+    
+    
+    function SetMaster(curve)
+        masterCurve = curve
+    endfunction
+    
+    function Normalize(actuals, index)
+        if (IsEmpty(masterCurve))
+            throw("No master curve provided!")
+        endif
+        
+        private result = NULL
+        if (IsEmpty(index))
+            result = actuals - masterCurve
+            result.Time = actuals.Time
+        else
+            result = actuals[index] - masterCurve[index]
+            result.Time = GetTime(actuals[index])
+        endif
+        
+        return result
+    endfunction
+endclass
