@@ -1,0 +1,26 @@
+class CSVUtils
+    function Read(string path)
+        private f = File.Open(path, 1, 0, 0, 1)
+        try
+            private string output = File.ReadDelim(f, -1, ",", chr(10), 0, 1)
+        catch()
+            System.ErrorMessage(strLastError)
+            File.Abort(f)
+        endcatch
+        File.Close(f)
+        
+        return output
+    endfunction
+    function Write(string path, string data)
+        private f = File.Open(path, 0, 1, 0, 1)
+        try
+            File.WriteDelim(f, data, ",", chr(10))
+            File.Flush(f)
+        catch()
+            System.ErrorMessage(strLastError)
+        endcatch
+        File.Close(f)
+    endfunction
+endclass
+
+global CSVUtils = new(CSVUtils)
