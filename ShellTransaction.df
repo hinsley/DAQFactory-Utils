@@ -1,0 +1,58 @@
+function ShellTransaction(string cmd, string stdin)
+    // Execute a shell transaction.
+    //
+    // Args:
+    // - cmd: Shell command to supply to CMD.exe.
+    // - stdin: STDIN to pipe into shell execution. If an array is supplied, converts to CSV (1D -> newlines, 2D -> commas). This argument is optional.
+    //
+    // Returns:
+    // - Up to 2D array containing CSV-decoded STDOUT.
+    
+    // Find a currently unused transaction ID.
+    private transactionId = 0
+    while (File.GetFileExists("transaction.in." + transactionId) || \
+           File.GetFileExists("transaction.out." + transactionId) || \
+           File.GetFileExists("transaction.out." + transactionId + ".tmp"))
+        transactionId++
+    endwhile
+    
+    // Build transaction filenames for piping.
+    private string inputFileName = "transaction.in." + transactionId
+    private string outputFileName = "transaction.out." + transactionId
+    private string tmpOutputFileName = outputFileName + ".tmp"
+    
+    // Create input file from which to pipe STDIN.
+    CSVUtils.Write(inputFileName, stdin)
+    
+    // Execute supplied command.
+    System.ShellExecute("cmd", "open", "/C type " + inputFileName + \
+                                       " | " + cmd + \
+                                       " > " + tmpOutputFileName + \
+                                       " & move " + tmpOutputFileName + " " + outputFileName, NULL, "hide")
+    
+    // Wait until output file is created.
+    waitfor(File.GetFileExists(outputFileName), 1)
+    
+    // Delete input file.
+    while (File.GetFileExists(inputFileName))
+        try
+            File.Delete(inputFileName)
+        catch()
+            // System.ErrorMessage(strLastError)
+        endcatch
+    endwhile
+    
+    // Retrieve output.
+    private string output = CSVUtils.Read(outputFileName)
+    
+    // Delete output file.
+    while (File.GetFileExists(outputFileName))
+        try
+            File.Delete(outputFileName)
+        catch()
+            // System.ErrorMessage(strLastError)
+        endcatch
+    endwhile
+    
+    return output
+endfunction
