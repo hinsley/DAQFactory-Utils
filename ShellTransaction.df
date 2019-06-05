@@ -1,6 +1,14 @@
 function ShellTransaction(string cmd, string stdin)
     // Execute a shell transaction.
     //
+    // Note that when Windows shell pipes data out to a file, it creates that file before the command being piped out
+    // completes execution. Because this function relies on the existence of an output file to trigger a transaction
+    // completion event, this can cause an empty or incomplete read. Instead we pipe shell output to a temporary
+    // output file and upon completion have the shell rename that file to its final name, which triggers the event
+    // hook and will never produce a faulty result (unless the supplied shell command spawns a non-blocking process
+    // which continues to pipe to STDOUT after the main thread has completed execution), which will have undefined
+    // behavior.
+    //
     // Args:
     // - cmd: Shell command to supply to CMD.exe.
     // - stdin: STDIN to pipe into shell execution. If an array is supplied, converts to CSV (1D -> newlines, 2D -> commas). This argument is optional.
