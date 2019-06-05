@@ -16,7 +16,7 @@ class Master
     
     function Normalize(actuals, index)
         if (IsEmpty(masterCurve))
-            throw("No master curve provided.")
+            throw("No master curve provided")
         endif
         
         private result = NULL
