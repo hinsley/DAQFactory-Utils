@@ -17,8 +17,20 @@ class TimeTail
         return channelData[0, startIndex]
     endfunction
     
-    function From(startTime)
-        // TODO: Implement this.
+    function From(string channelName, startTime)
+        private channelData = Evaluate(channelName)
+        
+        private startIndex = 0
+        
+        while (startIndex < NumRows(channelData))
+            if (startTime >= GetTime(channelData[startIndex]))
+                break
+            else
+                startIndex++
+            endif
+        endwhile
+        
+        return channelData[0, startIndex]
     endfunction
 endclass
 
