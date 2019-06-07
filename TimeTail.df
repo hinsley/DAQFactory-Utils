@@ -1,5 +1,6 @@
 class TimeTail
     // Utilities for obtaining sections of channel history.
+    
     function Span(string channelName, timeInterval)
         private channelData = Evaluate(channelName)
         
