@@ -1,0 +1,25 @@
+class TimeTail
+    // Utilities for obtaining sections of channel history.
+    function Span(string channelName, timeInterval)
+        private channelData = Evaluate(channelName)
+        
+        private endTime = GetTime(channelData[0])
+        private startIndex = 0
+        
+        while (startIndex < NumRows(channelData))
+            if (endTime - GetTime(channelData[startIndex]) > timeInterval)
+                break
+            else
+                startIndex++
+            endif
+        endwhile
+        
+        return channelData[0, startIndex]
+    endfunction
+    
+    function From(startTime)
+        // TODO: Implement this.
+    endfunction
+endclass
+
+global TimeTail = new(TimeTail)
