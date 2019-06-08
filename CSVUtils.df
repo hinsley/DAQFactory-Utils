@@ -1,4 +1,17 @@
 class CSVUtils
+    function ColumnIndex(string data, string column)
+        private result = NULL
+        
+        for (Private.Counter = 0, Counter < NumCols(data), Counter++)
+            if (data[0][Counter] == column)
+                result = Counter
+                break
+            endif
+        endfor
+        
+        return result
+    endfunction
+    
     function Read(string path)
         private f = File.Open(path, 1, 0, 0, 1)
         try
@@ -11,6 +24,31 @@ class CSVUtils
         
         return output
     endfunction
+    
+    function SelectRow(string data, column, string search)
+        // Selects a row from a table based upon a column lookup.
+        //
+        // Args:
+        // - data: Table containing data to look up. This must be a 2D array with a header / column title row.
+        // - column: Index of column to search within.
+        // - search: Value to search for.
+        //
+        // Returns:
+        // - If a result is found, returns the matching row.
+        // - If no result is found, returns NULL. 
+        
+        private rowIndex = NULL
+        
+        for (Private.Counter = 1, Counter < NumRows(data), Counter++)
+            if (data[Counter][column] == search)
+                rowIndex = Counter
+                break
+            endif
+        endfor
+        
+        return rowIndex
+    endfunction
+    
     function Write(string path, string data)
         private f = File.Open(path, 0, 1, 0, 1)
         try
