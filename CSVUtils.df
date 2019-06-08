@@ -46,7 +46,11 @@ class CSVUtils
             endif
         endfor
         
-        return rowIndex
+        if (IsEmpty(rowIndex))
+            return NULL
+        else
+            return data[rowIndex]
+        endif
     endfunction
     
     function Write(string path, string data)
