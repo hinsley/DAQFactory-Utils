@@ -25,7 +25,7 @@ class CSVUtils
         return output
     endfunction
     
-    function SelectRow(string data, column, string search)
+    function SelectRow(string data, column, string search, returnIndex)
         // Selects a row from a table based upon a column lookup.
         //
         // Args:
@@ -34,7 +34,9 @@ class CSVUtils
         // - search: Value to search for.
         //
         // Returns:
-        // - If a result is found, returns the matching row.
+        // - If a result is found, returns:
+        //   - If returnIndex is 0 or omitted, returns the matching row.
+        //   - If returnIndex is 1, returns the index of the matching row.
         // - If no result is found, returns NULL. 
         
         private rowIndex = NULL
@@ -46,7 +48,13 @@ class CSVUtils
             endif
         endfor
         
-        if (IsEmpty(rowIndex))
+        if (IsEmpty(returnIndex))
+            private returnIndex = 0
+        endif
+        
+        if (returnIndex)
+            return rowIndex
+        else if (IsEmpty(rowIndex))
             return NULL
         else
             return data[rowIndex]
