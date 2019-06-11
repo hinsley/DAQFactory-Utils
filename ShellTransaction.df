@@ -28,25 +28,23 @@ function ShellTransaction(string workDirectory, string cmd, string stdin)
     
     // Find a currently unused transaction ID.
     private transactionId = 0
-    while (File.GetFileExists(workDirectory + "transaction.in." + transactionId) || \
-           File.GetFileExists(workDirectory + "transaction.out." + transactionId) || \
-           File.GetFileExists(workDirectory + "transaction.out." + transactionId + ".tmp"))
+    while (File.GetFileExists(workDirectory + "\transaction.in." + transactionId) || \
+           File.GetFileExists(workDirectory + "\transaction.out." + transactionId) || \
+           File.GetFileExists(workDirectory + "\transaction.out." + transactionId + ".tmp"))
         transactionId++
     endwhile
     
     // Build transaction filenames for piping.
-    private string inputFileName = workDirectory + "transaction.in." + transactionId
-    private string outputFileName = workDirectory + "transaction.out." + transactionId
+    private string inputFileName = workDirectory + "\transaction.in." + transactionId
+    private string outputFileName = workDirectory + "\transaction.out." + transactionId
     private string tmpOutputFileName = outputFileName + ".tmp"
     
     // Create input file from which to pipe STDIN.
     CSVUtils.Write(inputFileName, stdin)
     
-    // Execute supplied command.
-    System.ShellExecute("cmd", "open", "/C type " + inputFileName + \
-                                       " | " + cmd + \
-                                       " > " + tmpOutputFileName + \
-                                       " & move " + tmpOutputFileName + " " + outputFileName, NULL, "hide")
+    // Execute supplied command. This line is so long because the DAQFactory
+    // compiler cannot recognize what is valid code when multiple quotation mark types are involved, and I had no idea how to escape double quotations in string literals.
+    System.ShellExecute("cmd", "open", '/C type "' + inputFileName + '" | ' + cmd + ' > "' + tmpOutputFileName + '" & move "' + tmpOutputFileName + '" "' + outputFileName + '"', NULL, "hide")
     
     // Wait until output file is created.
     waitfor(File.GetFileExists(outputFileName), 1)
