@@ -11,29 +11,19 @@ hash_algos = hashlib.algorithms_available
 
 parser = argparse.ArgumentParser(description="Hash raw text data from STDIN.")
 
-parser.add_argument("-l", "--list",
-                    default=False,
-                    action="store_true",
-                    help="List all available algorithms")
-
-for algorithm in hash_algos:
-    parser.add_argument("--{}".format(algorithm),
-                        dest="hash_algo",
-                        default="sha256",
-                        action="store_const",
-                        const=algorithm,
-                        help="Select a hash algorithm (default sha256)")
+parser.add_argument("-a", "--algo",
+                    type=str,
+                    dest="hash_algo",
+                    choices=hash_algos,
+                    default="sha256",
+                    help="Select a hash algorithm (default sha256)")
 
 args = parser.parse_args()
 
 
-if args.list:
-    for algorithm in hash_algos:
-        print(algorithm)
-else:
-    import sys
+import sys
 
-    hash = hashlib.new(args.hash_algo)
-    input_data = sys.stdin.buffer.read()
-    hash.update(input_data)
-    print(hash.hexdigest())
+hash = hashlib.new(args.hash_algo)
+input_data = sys.stdin.buffer.read()
+hash.update(input_data)
+print(hash.hexdigest())
