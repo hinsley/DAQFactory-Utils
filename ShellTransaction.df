@@ -1,4 +1,4 @@
-function ShellTransaction(string cmd, string stdin)
+function ShellTransaction(string workDirectory, string cmd, string stdin)
     // Execute a shell transaction.
     //
     // Note that when Windows shell pipes data out to a file, it creates that file before the command being piped out
@@ -10,23 +10,33 @@ function ShellTransaction(string cmd, string stdin)
     // behavior.
     //
     // Args:
+    // - workDirectory: The directory to operate within. This is useful if
+    //   DAQFactory cannot access the directory at which it is installed. This
+    //   does not affect commands supplied; absolute paths should always be
+    //   used in commands.
     // - cmd: Shell command to supply to CMD.exe.
-    // - stdin: STDIN to pipe into shell execution. If an array is supplied, converts to CSV (1D -> newlines, 2D -> commas). This argument is optional.
+    // - stdin: STDIN to pipe into shell execution. If an array is supplied,
+    //   converts to CSV (1D -> newlines, 2D -> commas). This argument is
+    //   optional.
     //
     // Returns:
     // - Up to 2D array containing CSV-decoded STDOUT.
     
+    if (isEmpty(workDirectory))
+        private workDirectory = ""
+    endif
+    
     // Find a currently unused transaction ID.
     private transactionId = 0
-    while (File.GetFileExists("transaction.in." + transactionId) || \
-           File.GetFileExists("transaction.out." + transactionId) || \
-           File.GetFileExists("transaction.out." + transactionId + ".tmp"))
+    while (File.GetFileExists(workDirectory + "transaction.in." + transactionId) || \
+           File.GetFileExists(workDirectory + "transaction.out." + transactionId) || \
+           File.GetFileExists(workDirectory + "transaction.out." + transactionId + ".tmp"))
         transactionId++
     endwhile
     
     // Build transaction filenames for piping.
-    private string inputFileName = "transaction.in." + transactionId
-    private string outputFileName = "transaction.out." + transactionId
+    private string inputFileName = workDirectory + "transaction.in." + transactionId
+    private string outputFileName = workDirectory + "transaction.out." + transactionId
     private string tmpOutputFileName = outputFileName + ".tmp"
     
     // Create input file from which to pipe STDIN.
