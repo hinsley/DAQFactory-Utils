@@ -52,13 +52,14 @@ class CSVUtils
             private returnIndex = 0
         endif
         
-        if (returnIndex)
-            return rowIndex
-        else if (IsEmpty(rowIndex))
-            return NULL
-        else
-            return data[rowIndex]
-        endif
+        switch
+            case (returnIndex)
+                return rowIndex
+            case (IsEmpty(rowIndex))
+                return NULL
+            default
+                return data[rowIndex]
+        endcase
     endfunction
     
     function Write(string path, string data)
