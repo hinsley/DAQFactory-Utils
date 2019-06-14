@@ -1,0 +1,63 @@
+class RedirectTimer
+    local m_endTime
+    local m_duration
+    local m_isRunning = 0
+    local m_started = 0
+    local m_stoppedTime
+    local string m_redirectPage
+    
+    function m_WaitForTimeout()
+        while (m_isRunning)
+            if (SysTime() >= m_endTime)
+                Page.CurrentPage = m_redirectPage
+                m_isRunning = 0
+                m_started = 0
+            endif
+        endwhile
+    endfunction
+    
+    function Resume()
+        // Make sure to call this method in a separate thread as it is blocking.
+        
+        if (m_isRunning || !m_started)
+            return 0 // Failure.
+        endif
+        
+        m_endTime += SysTime() - m_stoppedTime
+        m_isRunning = 1
+        
+        m_WaitForTimeout()
+        
+        return 1 // Success.
+    endfunction
+    
+    function Start(string page, duration)
+        // Make sure to call this method in a separate thread as it is blocking.
+        
+        if (m_isRunning)
+            return 0 // Failure.
+        endif
+        
+        m_duration = duration
+        m_endTime = SysTime() + m_duration
+        m_isRunning = 1
+        m_started = 1
+        
+        m_redirectPage = page
+        m_WaitForTimeout()
+        
+        return 1 // Success.
+    endfunction
+    
+    function Stop()
+        if (!m_isRunning)
+            return 0 // Failure.
+        endif
+        
+        m_isRunning = 0
+        
+        m_stoppedTime = SysTime()
+        
+        return 1 // Success.
+    endfunction
+endclass
