@@ -23,5 +23,6 @@ function BoxcarMedian(array, boxcarSize)
       
       medians.Append(median)
    endfor
+   
    return medians
 endfunction
