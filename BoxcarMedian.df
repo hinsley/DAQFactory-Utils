@@ -1,18 +1,23 @@
 function BoxcarMedian(array, boxcarSize)
+   private arrayRows = NumRows(array)
+   private boxcarQuantity = arrayRows / boxcarSize
+   
    private medians = NULL
    
    private currentBoxcar
-   for (Private.Counter = 0, Counter < NumRows(array) / boxcarSize, Counter++)
+   for (Private.Counter = 0, Counter < boxcarQuantity, Counter++)
       currentBoxcar = NULL
       
-      for (Private.InternalCounter = 0, InternalCounter < boxcarSize && Counter * boxcarSize + InternalCounter < NumRows(array), InternalCounter++)
+      private currentBoxcarSize = Min(Concat(boxcarSize, arrayRows - (Counter * boxcarSize)))
+      
+      for (Private.InternalCounter = 0, InternalCounter < currentBoxcarSize, InternalCounter++)
          currentBoxcar.Append(array[Counter * boxcarSize + InternalCounter])
       endfor
       
       currentBoxcar = Sort(currentBoxcar)
       
-      private medianLower = currentBoxcar[(NumRows(currentBoxcar) + (NumRows(currentBoxcar) % 2) - 2)/2]
-      private medianUpper = currentBoxcar[(NumRows(currentBoxcar) - (NumRows(currentBoxcar) % 2))/2]
+      private medianLower = currentBoxcar[(currentBoxcarSize + (currentBoxcarSize % 2) - 2) / 2]
+      private medianUpper = currentBoxcar[(currentBoxcarSize - (currentBoxcarSize % 2)) / 2]
       private median = Mean(Concat(medianLower, medianUpper))
       median.Time = Mean(GetTime(Concat(medianLower, medianUpper)))
       
