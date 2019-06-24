@@ -1,4 +1,6 @@
 function Sort(array)
+   // Sorts an array by value while preserving time for each element.
+   
    // Flip (with antagonist signage).
    private intermediaryArray = GetTime(array)
    intermediaryArray.Time = -1 * array
