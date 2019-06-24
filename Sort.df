@@ -1,0 +1,14 @@
+function Sort(array)
+   // Flip (with antagonist signage).
+   private intermediaryArray = GetTime(array)
+   intermediaryArray.Time = -1 * array
+   
+   // Sort.
+   intermediaryArray = SortTime(intermediaryArray)
+   
+   // Flip (with original signage).
+   private newArray = -1 * GetTime(intermediaryArray)
+   newArray.Time = intermediaryArray
+   
+   return newArray
+endfunction
