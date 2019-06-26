@@ -14,14 +14,7 @@ function BoxcarMedian(array, boxcarSize)
          currentBoxcar.Append(array[Counter * boxcarSize + InternalCounter])
       endfor
       
-      currentBoxcar = Sort(currentBoxcar)
-      
-      private medianLower = currentBoxcar[(currentBoxcarSize + (currentBoxcarSize % 2) - 2) / 2]
-      private medianUpper = currentBoxcar[(currentBoxcarSize - (currentBoxcarSize % 2)) / 2]
-      private median = Mean(Concat(medianLower, medianUpper))
-      median.Time = Mean(GetTime(Concat(medianLower, medianUpper)))
-      
-      medians.Append(median)
+      medians.Append(Median(currentBoxcar))
    endfor
    
    return medians
