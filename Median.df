@@ -1,0 +1,12 @@
+function Median(array)
+      array = Sort(array)
+      private arraySize = NumRows(array)
+      
+      private medianLower = array[(arraySize + (arraySize % 2) - 2) / 2]
+      private medianUpper = array[(arraySize - (arraySize % 2)) / 2]
+      
+      private median = Mean(Concat(medianLower, medianUpper))
+      median.Time = Mean(GetTime(Concat(medianLower, medianUpper)))
+      
+      return median
+endfunction
