@@ -1,0 +1,14 @@
+function Movements(data)
+   // Generates an array of non-sequentially-redundant values from supplied array.
+   
+   private newData = data
+   
+   for (Private.Counter = 0, Counter < (NumRows(newData) - 1), Counter++)
+      if (newData[Counter] == newData[Counter + 1])
+         newData.RemoveAt(Counter)
+         Counter--
+      endif
+   endfor
+   
+   return newData
+endfunction

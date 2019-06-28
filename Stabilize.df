@@ -1,0 +1,26 @@
+function Stabilize(string channelName, period, rangeThreshold, smoothInterval)
+   // period: [s]
+   // smoothInterval: [s]
+   
+   private startTime = SysTime()
+   
+   if (IsEmpty(smoothInterval))
+      smoothInterval = 1
+   endif
+   
+   if (IsEmpty(period))
+      period = 2
+   endif
+   
+   while (1)
+      private channelHistory = Evaluate(channelName)
+      private channelTiming = Evaluate(channelName + ".Timing")
+      private rawSample = channelHistory[0, Min(Concat(NumRows(channelHistory) - 1, Floor(period / channelTiming)))]
+      private sample = Smooth(rawSample, Floor(smoothInterval / channelTiming))
+      private range = Max(sample) - Min(sample)
+      
+      if (range < rangeThreshold && (SysTime() - startTime) > period)
+         break
+      endif
+   endwhile
+endfunction

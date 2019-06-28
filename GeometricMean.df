@@ -1,0 +1,3 @@
+function GeometricMean(array)
+   return Product(array) ^ (1 / NumRows(array))
+endfunction

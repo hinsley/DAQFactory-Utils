@@ -1,0 +1,18 @@
+function GeometricMedian(array)
+   private sortedInvertedArray = Sort(1 / array)
+   private accumulator = 0
+   private midpoint = Sum(sortedInvertedArray) / 2
+   for (Private.Counter = 0, Counter < NumRows(sortedInvertedArray), Counter++)
+      accumulator += sortedInvertedArray[Counter]
+      try
+         switch
+            case (accumulator > midpoint)
+               return 1 / sortedInvertedArray[Counter]
+            case (accumulator == midpoint)
+               return ((1 / sortedInvertedArray[Counter + 1] + 1 / sortedInvertedArray[Counter]) / 2)
+         endcase
+      catch ()
+         return sortedInvertedArray[NumRows(sortedInvertedArray) - 1]
+      endcatch
+   endfor
+endfunction

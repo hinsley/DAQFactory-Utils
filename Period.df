@@ -1,0 +1,12 @@
+function Period(binaryData)
+   // Calculates time periods between each 1 in an array of binary values.
+   
+   private times = Filter(GetTime(binaryData), binaryData)
+   private periods = NULL
+   
+   for (Private.Counter = 1, Counter < NumRows(times), Counter++)
+      periods[Counter - 1] = times[Counter - 1] - times[Counter]
+   endfor
+   
+   return periods
+endfunction

@@ -1,0 +1,9 @@
+function Product(array)
+   private result = 1
+   
+   for (Private.Counter = 0, Counter < NumRows(array), Counter++)
+      result *= array[Counter]
+   endfor
+   
+   return result
+endfunction
