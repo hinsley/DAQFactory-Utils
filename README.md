@@ -1,2 +1,2 @@
 # DAQFactory-Utils
-DAQFactory code that might be useful
+DAQFactory code that ~~might~~ has thus far proved to be useful
