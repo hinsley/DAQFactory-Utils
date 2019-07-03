@@ -1,0 +1,18 @@
+function GeometricMidpoint(array)
+   private sortedArray = Sort(array)
+   private accumulator = 0
+   private midpoint = Sum(sortedArray) / 2
+   for (Private.Counter = 0, Counter < NumRows(sortedArray), Counter++)
+      accumulator += sortedArray[Counter]
+      try
+         switch
+            case (accumulator > midpoint)
+               return sortedArray[Counter]
+            case (accumulator == midpoint)
+               return ((sortedArray[Counter + 1] + sortedArray[Counter]) / 2)
+         endcase
+      catch ()
+         return sortedArray[NumRows(sortedArray) - 1]
+      endcatch
+   endfor
+endfunction
