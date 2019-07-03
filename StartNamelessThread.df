@@ -1,0 +1,23 @@
+function StartNamelessThread(string command, priority)
+   // Spawns a thread without requiring a name.
+   //
+   // Args:
+   // - command: Same as in StartThread(). The logic to be evaluated.
+   // - priority: Same as in StartThread(). Thread priority.
+   //
+   // Returns:
+   // - Name of spawned thread.
+   
+   for (Private.Counter = 0, 1, Counter++)
+      private string threadName = DoubleToStr(Counter)
+      private string threadStatus = GetThreadStatus(threadName)
+      if (threadStatus == "Thread not found" || threadStatus == "Thread stopped")
+         if (IsEmpty(priority))
+            StartThread(command, threadName)
+         else
+            StartThread(command, threadName, priority)
+         endif
+         return threadName
+      endif
+   endfor
+endfunction
