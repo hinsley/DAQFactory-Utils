@@ -1,0 +1,129 @@
+class ArrayUtils
+   function BoxcarMedian(array, boxcarSize)
+      private arrayRows = NumRows(array)
+      private boxcarQuantity = arrayRows / boxcarSize
+      
+      private medians = NULL
+      
+      private currentBoxcar
+      for (Private.Counter = 0, Counter < boxcarQuantity, Counter++)
+         currentBoxcar = NULL
+         
+         private currentBoxcarSize = Min(Concat(boxcarSize, arrayRows - (Counter * boxcarSize)))
+         
+         for (Private.InternalCounter = 0, InternalCounter < currentBoxcarSize, InternalCounter++)
+            currentBoxcar.Append(array[Counter * boxcarSize + InternalCounter])
+         endfor
+         
+         medians.Append(ArrayUtils.Median(currentBoxcar))
+      endfor
+      
+      return medians
+   endfunction
+   
+   function GeometricMean(array)
+      return ArrayUtils.Product(array) ^ (1 / NumRows(array))
+   endfunction
+   
+   function GeometricMidpoint(array)
+      private sortedArray = ArrayUtils.Sort(array)
+      private accumulator = 0
+      private midpoint = Sum(sortedArray) / 2
+      for (Private.Counter = 0, Counter < NumRows(sortedArray), Counter++)
+         accumulator += sortedArray[Counter]
+         try
+            switch
+               case (accumulator > midpoint)
+                  return sortedArray[Counter]
+               case (accumulator == midpoint)
+                  return ((sortedArray[Counter + 1] + sortedArray[Counter]) / 2)
+            endcase
+         catch ()
+            return sortedArray[NumRows(sortedArray) - 1]
+         endcatch
+      endfor
+   endfunction
+   
+   function Median(array)
+      array = ArrayUtils.Sort(array)
+      private arraySize = NumRows(array)
+      
+      private medianLower = array[(arraySize + (arraySize % 2) - 2) / 2]
+      private medianUpper = array[(arraySize - (arraySize % 2)) / 2]
+      
+      private median = Mean(Concat(medianLower, medianUpper))
+      median.Time = Mean(GetTime(Concat(medianLower, medianUpper)))
+      
+      return median
+   endfunction
+   
+   function Movements(data)
+      // Generates an array of non-sequentially-redundant values from supplied array.
+      
+      private newData = data
+      
+      for (Private.Counter = 0, Counter < (NumRows(newData) - 1), Counter++)
+         if (newData[Counter] == newData[Counter + 1])
+            newData.RemoveAt(Counter)
+            Counter--
+         endif
+      endfor
+      
+      return newData
+   endfunction
+   
+   function Period(binaryData)
+      // Calculates time periods between each 1 in an array of binary values.
+      
+      private times = Filter(GetTime(binaryData), binaryData)
+      private periods = NULL
+      
+      for (Private.Counter = 1, Counter < NumRows(times), Counter++)
+         periods[Counter - 1] = times[Counter - 1] - times[Counter]
+      endfor
+      
+      return periods
+   endfunction
+   
+   function Product(array)
+      private result = 1
+      
+      for (Private.Counter = 0, Counter < NumRows(array), Counter++)
+         result *= array[Counter]
+      endfor
+      
+      return result
+   endfunction
+   
+   function Sort(array)
+      // Sorts an array by value while preserving time for each element.
+      
+      // Flip (with antagonist signage).
+      private intermediaryArray = GetTime(array)
+      intermediaryArray.Time = -1 * array
+      
+      // Sort.
+      intermediaryArray = SortTime(intermediaryArray)
+      
+      // Flip (with original signage).
+      private newArray = -1 * GetTime(intermediaryArray)
+      newArray.Time = intermediaryArray
+      
+      return newArray
+   endfunction
+   
+   function TruncatedSmooth(data, smoothLength)
+      // Smooths an array and removes partially smoothed data at the end of the array.
+      //
+      // Args:
+      // - data: Array to smooth.
+      // - smoothLength: Number of subsequent data points to sample from array for smoothing.
+      // Returns:
+      // - Fully smoothed array with no partially smoothed values.
+      
+      return ((Smooth(data, smoothLength))[0, NumRows(data) - smoothLength - 1])
+   endfunction
+endclass
+
+
+global ArrayUtils = new(ArrayUtils)
