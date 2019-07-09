@@ -1,0 +1,48 @@
+class Conversions
+   function Linear(range_from, range_to, value_from)
+      // Converts/scales a value from one range to another in a linear fashion.
+      // Note that this is not suitable for converting/scaling delta values.
+      //
+      // Args:
+      // - range_from: An array comprising minimum and maximum values from which to
+      //   convert a value.
+      // - range_to: An array comprising minimum and maximum values toward which to
+      //   convert a value.
+      // - value_from: A value to convert/scale from one range to another.
+      //
+      // Returns:
+      // - Supplied value converted/scaled to its target range.
+       
+      private delta_range_from = Max(range_from) - Min(range_from)
+      private delta_range_to = Max(range_to) - Min(range_to)
+      
+      private derivative = delta_range_to / delta_range_from
+      private offset = derivative * Min(range_from) - Min(range_to)
+      
+      return derivative * value_from - offset
+   endfunction
+   
+   function LinearDeltaConversion(range_from, range_to, value_from)
+      // Converts/scales a delta value from one range to another in a linear
+      // fashion.
+      //
+      // Args:
+      // - range_from: An array comprising minimum and maximum values from which to
+      //   convert a delta value.
+      // - range_to: An array comprising minimum and maximum values toward which to
+      //   convert a delta value.
+      // - value_from: A delta value to convert/scale from one range to another.
+      //
+      // Returns:
+      // - Supplied delta value converted/scaled to its target range.
+       
+      private delta_range_from = Max(range_from) - Min(range_from)
+      private delta_range_to = Max(range_to) - Min(range_to)
+      
+      private derivative = delta_range_to / delta_range_from
+      
+      return derivative * value_from
+   endfunction
+endclass
+
+global Conversions = new(Conversions)
