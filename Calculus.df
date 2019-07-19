@@ -13,6 +13,16 @@ class Calculus
       
       return derivatives
    endfunction
+   
+   function RiemannTrapezoidal(channel)
+      private integral = 0
+      
+      for (Private.Counter = 1, Counter < NumRows(channel), Counter++)
+         integral += (channel[Counter] + channel[Counter - 1]) * Abs(GetTime(channel[Counter]) - GetTime(channel[Counter - 1])) / 2
+      endfor
+      
+      return integral
+   endfunction
 endclass
 
 global Calculus = new(Calculus)
