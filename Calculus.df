@@ -1,0 +1,18 @@
+class Calculus
+   function Derivative(channel)
+      private derivatives
+      
+      for (Private.Counter = 1, Counter < NumRows(channel), Counter++)
+         private currentTime = GetTime(channel[Counter])
+         private previousTime = GetTime(channel[Counter - 1])
+         
+         derivatives[Counter - 1] = (channel[Counter] - channel[Counter - 1]) / (currentTime - previousTime)
+         
+         derivatives[Counter - 1].Time = (currentTime + previousTime) / 2 // Set derivative time to midpoint of sampled data.
+      endfor
+      
+      return derivatives
+   endfunction
+endclass
+
+global Calculus = new(Calculus)
