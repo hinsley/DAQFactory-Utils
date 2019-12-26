@@ -112,6 +112,34 @@ class ArrayUtils
       return newArray
    endfunction
    
+   function TransposeMatrixNum(matrix)
+      // Transpose a 2-dimensional matrix. Does not work with string matrices.
+      
+      private result = NULL
+      
+      for (Private.resultRow = 0, resultRow < numCols(matrix), resultRow++)
+         for (Private.resultCol = 0, resultCol < numRows(matrix), resultCol++)
+            result[resultRow][resultCol] = matrix[resultCol][resultRow]
+         endfor
+      endfor
+      
+      return result
+   endfunction
+   
+   function TransposeMatrixStr(string matrix)
+      // Transpose a 2-dimensional matrix. Supports string matrices.
+      
+      private string result = NULL
+      
+      for (Private.resultRow = 0, resultRow < numCols(matrix), resultRow++)
+         for (Private.resultCol = 0, resultCol < numRows(matrix), resultCol++)
+            result[resultRow][resultCol] = matrix[resultCol][resultRow]
+         endfor
+      endfor
+      
+      return result
+   endfunction
+   
    function TruncatedSmooth(data, smoothLength)
       // Smooths an array and removes partially smoothed data at the end of the array.
       //
