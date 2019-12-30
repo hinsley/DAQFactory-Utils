@@ -4,7 +4,7 @@ class TimeTail
     function Span(string channelName, timeInterval)
         private channelData = Evaluate(channelName)
         
-        private endTime = GetTime(channelData[0])
+        private endTime = SysTime()
         private startIndex = 0
         
         while (startIndex < NumRows(channelData))
