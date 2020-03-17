@@ -44,6 +44,27 @@ class ArrayUtils
       endfor
    endfunction
    
+   function MatMult(a, b)
+      private result
+      
+      if (NumCols(a) != NumRows(b))
+         throw("Matrix dimensions do not match.")
+      endif
+      
+      for (Private.j = 0, j < NumCols(b), j++)
+         for (Private.i = 0, i < NumRows(a), i++)
+            private accumulator = 0
+            for (Private.k = 0, k < NumCols(a), k++)
+               accumulator += a[i][k] * b[k][j]
+            endfor
+            
+            result[i][j] = accumulator
+         endfor
+      endfor
+      
+      return result
+   endfunction
+   
    function Median(array)
       array = ArrayUtils.Sort(array)
       private arraySize = NumRows(array)
